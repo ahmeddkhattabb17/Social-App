@@ -16,3 +16,4 @@ export * from "./notifications/getNotifications";
 export * from "./notifications/markNotificationRead";
 export * from "./notifications/markAllNotificationsRead";
 export * from "./settings/changePasswordRequest";
+export * from "./profile/uploadPhoto";
