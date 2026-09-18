@@ -1,5 +1,6 @@
 import { Camera, Grid2X2, Loader2 } from "lucide-react";
 import { useRef } from "react";
+import type { ChangeEvent } from "react";
 import type { AppUser, Post } from "../services";
 import { Avatar } from "../Components/Avatar";
 import { Card } from "../Components/Card";
@@ -25,7 +26,7 @@ export function Profile({ user, posts, loading, details, edit, remove, uploadPho
     inputRef.current?.click();
   }
 
-  function onPhotoChange(event: React.ChangeEvent<HTMLInputElement>) {
+  function onPhotoChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (file) uploadPhoto(file);
     event.target.value = "";
