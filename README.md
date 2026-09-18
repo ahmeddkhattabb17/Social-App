@@ -52,7 +52,7 @@ npm run build
 ```
 
 ## 🎯 Portfolio Focus
-Social App demonstrates TypeScript, API-driven React architecture, reusable components, authentication flows, stateful UI, responsive design, and feature-based service organization.
+TypeScript, API-driven React architecture, reusable components, authentication flows, stateful UI, responsive design, and feature-based service organization.
 
 ## 👤 Author
 Ahmed Khattab — Frontend Developer
