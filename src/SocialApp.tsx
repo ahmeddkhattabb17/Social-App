@@ -20,6 +20,7 @@ import {
   reactToPost,
   savePostRequest,
   updatePostComment,
+  uploadProfilePhoto,
 } from "./services";
 import type { AppUser, Comment, Notify, Post } from "./services";
 import { Header } from "./Components/Header";
@@ -256,6 +257,29 @@ export default function SocialApp() {
     }
   }
 
+  async function changeProfilePhoto(file: File) {
+    if (!token) return;
+    setBusy("profile-photo");
+    try {
+      const payload = await uploadProfilePhoto(token, file);
+      const nextProfile = object<AppUser>(payload.data);
+      if (nextProfile) {
+        setUser((current) => {
+          const next = { ...current, ...nextProfile };
+          localStorage.setItem(USER, JSON.stringify(next));
+          return next;
+        });
+      } else {
+        await loadProfile();
+      }
+      setToast("Profile photo updated.");
+    } catch (error) {
+      setToast(errText(error));
+    } finally {
+      setBusy("");
+    }
+  }
+
   async function changePassword(currentPassword: string, password: string, rePassword: string) {
     if (!token) return;
     setBusy("password");
@@ -287,7 +311,7 @@ export default function SocialApp() {
       {toast && <div className="fixed bottom-4 left-1/2 z-50 max-w-[calc(100vw-32px)] -translate-x-1/2 rounded-[12px] border border-[#d7e1ef] bg-white px-4 py-3 text-sm font-semibold text-[#314058] shadow-xl">{toast}<button className="ml-4 text-[#0875ff]" onClick={() => setToast("")} type="button">Dismiss</button></div>}
       {view === "feed" && <Feed busy={busy === "post"} cancel={() => setEditing(null)} details={openDetails} edit={editPost} editing={editing} go={go} loading={loading} page={page} pages={pages} posts={posts} react={react} remove={removePost} save={savePost} setPage={setPage} user={user} />}
       {view === "details" && <Details back={() => setView("feed")} comments={comments} createComment={createComment} editPost={editPost} loading={commentsLoading} post={selected} react={react} removeComment={removeComment} removePost={removePost} updateComment={updateComment} user={user} />}
-      {view === "profile" && <Profile details={openDetails} edit={editPost} loading={profileLoading} posts={profilePosts} remove={removePost} user={user} />}
+      {view === "profile" && <Profile details={openDetails} edit={editPost} loading={profileLoading} posts={profilePosts} remove={removePost} user={user} busy={busy === "profile-photo"} uploadPhoto={changeProfilePhoto} />}
       {view === "notifications" && <Notifications items={notifications} mark={mark} markAll={markAll} />}
       {view === "settings" && <SettingsView busy={busy === "password"} change={changePassword} message={settingsMessage} />}
     </div>
